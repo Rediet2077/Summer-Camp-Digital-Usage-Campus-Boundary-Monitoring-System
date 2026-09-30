@@ -9,474 +9,396 @@ class SettingsScreen extends StatefulWidget {
 }
 
 class _SettingsScreenState extends State<SettingsScreen> {
-  bool _notificationsEnabled = true;
-  bool _darkModeEnabled = true;
-  bool _locationEnabled = true;
-  bool _usageMonitoringEnabled = true;
+  bool _darkMode = false;
+  bool _biometricAuth = true;
+  String _selectedLanguage = 'English';
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppTheme.darkBackground,
+      backgroundColor: AppTheme.lightBackground,
       appBar: AppBar(
-        backgroundColor: AppTheme.darkBackground,
+        backgroundColor: Colors.white,
         elevation: 0,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back, color: AppTheme.textPrimary),
-          onPressed: () => Navigator.of(context).pop(),
+          onPressed: () => Navigator.pop(context),
         ),
         title: const Text(
           'Settings',
           style: TextStyle(
             color: AppTheme.textPrimary,
-            fontSize: 20,
+            fontSize: 18,
             fontWeight: FontWeight.w600,
           ),
         ),
+        centerTitle: false,
       ),
-      body: ListView(
-        padding: const EdgeInsets.all(16),
-        children: [
-          // Account Section
-          _buildSectionHeader('Account'),
-          _buildAccountCard(),
-          const SizedBox(height: 24),
-
-          // Preferences Section
-          _buildSectionHeader('Preferences'),
-          _buildPreferencesCard(),
-          const SizedBox(height: 24),
-
-          // Monitoring Section
-          _buildSectionHeader('Monitoring'),
-          _buildMonitoringCard(),
-          const SizedBox(height: 24),
-
-          // Privacy Section
-          _buildSectionHeader('Privacy & Security'),
-          _buildPrivacyCard(),
-          const SizedBox(height: 24),
-
-          // About Section
-          _buildSectionHeader('About'),
-          _buildAboutCard(),
-          const SizedBox(height: 24),
-
-          // Logout Button
-          _buildLogoutButton(),
-          const SizedBox(height: 40),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildSectionHeader(String title) {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 12, left: 4),
-      child: Text(
-        title,
-        style: const TextStyle(
-          color: AppTheme.textPrimary,
-          fontSize: 18,
-          fontWeight: FontWeight.bold,
-        ),
-      ),
-    );
-  }
-
-  Widget _buildAccountCard() {
-    return Container(
-      decoration: BoxDecoration(
-        color: AppTheme.cardBackground,
-        borderRadius: BorderRadius.circular(12),
-      ),
-      child: Column(
-        children: [
-          ListTile(
-            leading: CircleAvatar(
-              radius: 24,
-              backgroundColor: AppTheme.secondaryColor.withOpacity(0.2),
-              child: const Text(
-                'JD',
-                style: TextStyle(
-                  color: AppTheme.secondaryColor,
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-            ),
-            title: const Text(
-              'John Doe',
+      body: SingleChildScrollView(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            // Appearance Section
+            const Text(
+              'Appearance',
               style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.bold,
                 color: AppTheme.textPrimary,
-                fontWeight: FontWeight.w600,
               ),
             ),
-            subtitle: const Text(
-              'john.doe@example.com',
+            const SizedBox(height: 12),
+            
+            Container(
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(12),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withOpacity(0.05),
+                    blurRadius: 8,
+                    offset: const Offset(0, 2),
+                  ),
+                ],
+              ),
+              child: Column(
+                children: [
+                  _buildToggleItem(
+                    icon: Icons.dark_mode,
+                    title: 'Dark Mode',
+                    subtitle: 'Enable dark theme',
+                    value: _darkMode,
+                    onChanged: (value) {
+                      setState(() {
+                        _darkMode = value;
+                      });
+                    },
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(height: 24),
+            
+            // Language Section
+            const Text(
+              'Language',
               style: TextStyle(
-                color: AppTheme.textSecondary,
-                fontSize: 13,
+                fontSize: 16,
+                fontWeight: FontWeight.bold,
+                color: AppTheme.textPrimary,
               ),
             ),
-            trailing: IconButton(
-              icon: const Icon(Icons.edit, color: AppTheme.secondaryColor),
-              onPressed: () {
-                // Edit profile
-              },
+            const SizedBox(height: 12),
+            
+            Container(
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(12),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withOpacity(0.05),
+                    blurRadius: 8,
+                    offset: const Offset(0, 2),
+                  ),
+                ],
+              ),
+              child: Column(
+                children: [
+                  _buildLanguageItem('English', 'en'),
+                  Divider(height: 1, color: Colors.grey.shade200),
+                  _buildLanguageItem('Amharic', 'am'),
+                  Divider(height: 1, color: Colors.grey.shade200),
+                  _buildLanguageItem('Oromo', 'or'),
+                ],
+              ),
             ),
-          ),
-          const Divider(color: AppTheme.textSecondary, height: 1),
-          _buildMenuItem(
-            icon: Icons.person,
-            title: 'Profile Settings',
-            onTap: () {},
-          ),
-          _buildMenuItem(
-            icon: Icons.lock,
-            title: 'Change Password',
-            onTap: () {},
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildPreferencesCard() {
-    return Container(
-      decoration: BoxDecoration(
-        color: AppTheme.cardBackground,
-        borderRadius: BorderRadius.circular(12),
-      ),
-      child: Column(
-        children: [
-          _buildSwitchTile(
-            icon: Icons.notifications,
-            title: 'Notifications',
-            subtitle: 'Receive push notifications',
-            value: _notificationsEnabled,
-            onChanged: (value) {
-              setState(() {
-                _notificationsEnabled = value;
-              });
-            },
-          ),
-          const Divider(color: AppTheme.textSecondary, height: 1, indent: 60),
-          _buildSwitchTile(
-            icon: Icons.dark_mode,
-            title: 'Dark Mode',
-            subtitle: 'Use dark theme',
-            value: _darkModeEnabled,
-            onChanged: (value) {
-              setState(() {
-                _darkModeEnabled = value;
-              });
-            },
-          ),
-          const Divider(color: AppTheme.textSecondary, height: 1, indent: 60),
-          _buildMenuItem(
-            icon: Icons.language,
-            title: 'Language',
-            subtitle: 'English',
-            onTap: () {},
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildMonitoringCard() {
-    return Container(
-      decoration: BoxDecoration(
-        color: AppTheme.cardBackground,
-        borderRadius: BorderRadius.circular(12),
-      ),
-      child: Column(
-        children: [
-          _buildSwitchTile(
-            icon: Icons.location_on,
-            title: 'Location Tracking',
-            subtitle: 'Allow camp boundary monitoring',
-            value: _locationEnabled,
-            onChanged: (value) {
-              setState(() {
-                _locationEnabled = value;
-              });
-            },
-          ),
-          const Divider(color: AppTheme.textSecondary, height: 1, indent: 60),
-          _buildSwitchTile(
-            icon: Icons.apps,
-            title: 'Usage Monitoring',
-            subtitle: 'Track app usage',
-            value: _usageMonitoringEnabled,
-            onChanged: (value) {
-              setState(() {
-                _usageMonitoringEnabled = value;
-              });
-            },
-          ),
-          const Divider(color: AppTheme.textSecondary, height: 1, indent: 60),
-          _buildMenuItem(
-            icon: Icons.devices,
-            title: 'My Devices',
-            subtitle: '2 devices connected',
-            onTap: () {},
-          ),
-          const Divider(color: AppTheme.textSecondary, height: 1, indent: 60),
-          _buildMenuItem(
-            icon: Icons.security,
-            title: 'Permissions',
-            onTap: () {},
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildPrivacyCard() {
-    return Container(
-      decoration: BoxDecoration(
-        color: AppTheme.cardBackground,
-        borderRadius: BorderRadius.circular(12),
-      ),
-      child: Column(
-        children: [
-          _buildMenuItem(
-            icon: Icons.privacy_tip,
-            title: 'Privacy Policy',
-            onTap: () {},
-          ),
-          const Divider(color: AppTheme.textSecondary, height: 1, indent: 60),
-          _buildMenuItem(
-            icon: Icons.description,
-            title: 'Terms of Service',
-            onTap: () {},
-          ),
-          const Divider(color: AppTheme.textSecondary, height: 1, indent: 60),
-          _buildMenuItem(
-            icon: Icons.data_usage,
-            title: 'Data Usage',
-            onTap: () {},
-          ),
-          const Divider(color: AppTheme.textSecondary, height: 1, indent: 60),
-          _buildMenuItem(
-            icon: Icons.delete_forever,
-            title: 'Clear Data',
-            titleColor: AppTheme.errorColor,
-            onTap: () {
-              _showClearDataDialog();
-            },
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildAboutCard() {
-    return Container(
-      decoration: BoxDecoration(
-        color: AppTheme.cardBackground,
-        borderRadius: BorderRadius.circular(12),
-      ),
-      child: Column(
-        children: [
-          _buildMenuItem(
-            icon: Icons.info,
-            title: 'App Version',
-            subtitle: '1.0.0',
-            onTap: () {},
-          ),
-          const Divider(color: AppTheme.textSecondary, height: 1, indent: 60),
-          _buildMenuItem(
-            icon: Icons.help,
-            title: 'Help & Support',
-            onTap: () {},
-          ),
-          const Divider(color: AppTheme.textSecondary, height: 1, indent: 60),
-          _buildMenuItem(
-            icon: Icons.bug_report,
-            title: 'Report a Bug',
-            onTap: () {},
-          ),
-          const Divider(color: AppTheme.textSecondary, height: 1, indent: 60),
-          _buildMenuItem(
-            icon: Icons.star,
-            title: 'Rate App',
-            onTap: () {},
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildMenuItem({
-    required IconData icon,
-    required String title,
-    String? subtitle,
-    Color? titleColor,
-    VoidCallback? onTap,
-  }) {
-    return ListTile(
-      leading: Icon(icon, color: AppTheme.secondaryColor),
-      title: Text(
-        title,
-        style: TextStyle(
-          color: titleColor ?? AppTheme.textPrimary,
-          fontWeight: FontWeight.w500,
+            const SizedBox(height: 24),
+            
+            // Biometric Section
+            const Text(
+              'Biometric',
+              style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.bold,
+                color: AppTheme.textPrimary,
+              ),
+            ),
+            const SizedBox(height: 12),
+            
+            Container(
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(12),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withOpacity(0.05),
+                    blurRadius: 8,
+                    offset: const Offset(0, 2),
+                  ),
+                ],
+              ),
+              child: Column(
+                children: [
+                  _buildToggleItem(
+                    icon: Icons.fingerprint,
+                    title: 'Biometric Auth',
+                    subtitle: 'Use fingerprint or face recognition',
+                    value: _biometricAuth,
+                    onChanged: (value) {
+                      setState(() {
+                        _biometricAuth = value;
+                      });
+                    },
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(height: 24),
+            
+            // About Section
+            const Text(
+              'About',
+              style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.bold,
+                color: AppTheme.textPrimary,
+              ),
+            ),
+            const SizedBox(height: 12),
+            
+            Container(
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(12),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withOpacity(0.05),
+                    blurRadius: 8,
+                    offset: const Offset(0, 2),
+                  ),
+                ],
+              ),
+              child: Column(
+                children: [
+                  _buildInfoItem(
+                    icon: Icons.info_outline,
+                    title: 'App Version',
+                    value: '1.0.0',
+                  ),
+                  Divider(height: 1, color: Colors.grey.shade200),
+                  _buildActionItem(
+                    icon: Icons.system_update,
+                    title: 'Check for Updates',
+                    onTap: () {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content: Text('You are on the latest version'),
+                          backgroundColor: AppTheme.successColor,
+                        ),
+                      );
+                    },
+                  ),
+                  Divider(height: 1, color: Colors.grey.shade200),
+                  _buildActionItem(
+                    icon: Icons.description,
+                    title: 'Terms & Conditions',
+                    onTap: () {},
+                  ),
+                  Divider(height: 1, color: Colors.grey.shade200),
+                  _buildActionItem(
+                    icon: Icons.privacy_tip,
+                    title: 'Privacy Policy',
+                    onTap: () {},
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(height: 32),
+          ],
         ),
       ),
-      subtitle: subtitle != null
-          ? Text(
-              subtitle,
-              style: const TextStyle(
-                color: AppTheme.textSecondary,
-                fontSize: 13,
-              ),
-            )
-          : null,
-      trailing: const Icon(
-        Icons.arrow_forward_ios,
-        size: 16,
-        color: AppTheme.textSecondary,
-      ),
-      onTap: onTap,
     );
   }
 
-  Widget _buildSwitchTile({
+  Widget _buildToggleItem({
     required IconData icon,
     required String title,
     required String subtitle,
     required bool value,
     required ValueChanged<bool> onChanged,
   }) {
-    return ListTile(
-      leading: Icon(icon, color: AppTheme.secondaryColor),
-      title: Text(
-        title,
-        style: const TextStyle(
-          color: AppTheme.textPrimary,
-          fontWeight: FontWeight.w500,
-        ),
-      ),
-      subtitle: Text(
-        subtitle,
-        style: const TextStyle(
-          color: AppTheme.textSecondary,
-          fontSize: 13,
-        ),
-      ),
-      trailing: Switch(
-        value: value,
-        onChanged: onChanged,
-        activeColor: AppTheme.successColor,
-      ),
-    );
-  }
-
-  Widget _buildLogoutButton() {
-    return SizedBox(
-      width: double.infinity,
-      height: 56,
-      child: OutlinedButton.icon(
-        onPressed: () {
-          _showLogoutDialog();
-        },
-        icon: const Icon(Icons.logout),
-        label: const Text(
-          'Logout',
-          style: TextStyle(
-            fontSize: 16,
-            fontWeight: FontWeight.w600,
-          ),
-        ),
-        style: OutlinedButton.styleFrom(
-          foregroundColor: AppTheme.errorColor,
-          side: const BorderSide(color: AppTheme.errorColor),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(12),
-          ),
-        ),
-      ),
-    );
-  }
-
-  void _showLogoutDialog() {
-    showDialog(
-      context: context,
-      builder: (context) {
-        return AlertDialog(
-          backgroundColor: AppTheme.cardBackground,
-          title: const Text(
-            'Logout',
-            style: TextStyle(color: AppTheme.textPrimary),
-          ),
-          content: const Text(
-            'Are you sure you want to logout?',
-            style: TextStyle(color: AppTheme.textSecondary),
-          ),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.pop(context),
-              child: const Text('Cancel'),
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+      child: Row(
+        children: [
+          Container(
+            width: 40,
+            height: 40,
+            decoration: BoxDecoration(
+              color: AppTheme.primaryColor.withOpacity(0.1),
+              borderRadius: BorderRadius.circular(10),
             ),
-            TextButton(
-              onPressed: () {
-                Navigator.pop(context);
-                // Perform logout
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(content: Text('Logged out successfully')),
-                );
-              },
-              child: const Text(
-                'Logout',
-                style: TextStyle(color: AppTheme.errorColor),
-              ),
-            ),
-          ],
-        );
-      },
-    );
-  }
-
-  void _showClearDataDialog() {
-    showDialog(
-      context: context,
-      builder: (context) {
-        return AlertDialog(
-          backgroundColor: AppTheme.cardBackground,
-          title: const Text(
-            'Clear Data',
-            style: TextStyle(color: AppTheme.textPrimary),
+            child: Icon(icon, color: AppTheme.primaryColor, size: 20),
           ),
-          content: const Text(
-            'This will clear all local app data. This action cannot be undone.',
-            style: TextStyle(color: AppTheme.textSecondary),
-          ),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.pop(context),
-              child: const Text('Cancel'),
-            ),
-            TextButton(
-              onPressed: () {
-                Navigator.pop(context);
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(
-                    content: Text('Data cleared successfully'),
-                    backgroundColor: AppTheme.successColor,
+          const SizedBox(width: 16),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  title,
+                  style: const TextStyle(
+                    fontSize: 15,
+                    fontWeight: FontWeight.w600,
+                    color: AppTheme.textPrimary,
                   ),
-                );
-              },
-              child: const Text(
-                'Clear',
-                style: TextStyle(color: AppTheme.errorColor),
+                ),
+                const SizedBox(height: 2),
+                Text(
+                  subtitle,
+                  style: const TextStyle(
+                    fontSize: 12,
+                    color: AppTheme.textSecondary,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          Switch(
+            value: value,
+            onChanged: onChanged,
+            activeColor: AppTheme.primaryColor,
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildLanguageItem(String language, String code) {
+    final isSelected = _selectedLanguage == language;
+    return InkWell(
+      onTap: () {
+        setState(() {
+          _selectedLanguage = language;
+        });
+      },
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+        child: Row(
+          children: [
+            Container(
+              width: 40,
+              height: 40,
+              decoration: BoxDecoration(
+                color: AppTheme.primaryColor.withOpacity(0.1),
+                borderRadius: BorderRadius.circular(10),
+              ),
+              child: const Icon(Icons.language, color: AppTheme.primaryColor, size: 20),
+            ),
+            const SizedBox(width: 16),
+            Expanded(
+              child: Text(
+                language,
+                style: const TextStyle(
+                  fontSize: 15,
+                  fontWeight: FontWeight.w500,
+                  color: AppTheme.textPrimary,
+                ),
               ),
             ),
+            if (isSelected)
+              const Icon(
+                Icons.check_circle,
+                color: AppTheme.primaryColor,
+                size: 22,
+              ),
           ],
-        );
-      },
+        ),
+      ),
+    );
+  }
+
+  Widget _buildInfoItem({
+    required IconData icon,
+    required String title,
+    required String value,
+  }) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+      child: Row(
+        children: [
+          Container(
+            width: 40,
+            height: 40,
+            decoration: BoxDecoration(
+              color: AppTheme.primaryColor.withOpacity(0.1),
+              borderRadius: BorderRadius.circular(10),
+            ),
+            child: Icon(icon, color: AppTheme.primaryColor, size: 20),
+          ),
+          const SizedBox(width: 16),
+          Expanded(
+            child: Text(
+              title,
+              style: const TextStyle(
+                fontSize: 15,
+                fontWeight: FontWeight.w500,
+                color: AppTheme.textPrimary,
+              ),
+            ),
+          ),
+          Text(
+            value,
+            style: const TextStyle(
+              fontSize: 14,
+              color: AppTheme.textSecondary,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildActionItem({
+    required IconData icon,
+    required String title,
+    required VoidCallback onTap,
+  }) {
+    return InkWell(
+      onTap: onTap,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+        child: Row(
+          children: [
+            Container(
+              width: 40,
+              height: 40,
+              decoration: BoxDecoration(
+                color: AppTheme.primaryColor.withOpacity(0.1),
+                borderRadius: BorderRadius.circular(10),
+              ),
+              child: Icon(icon, color: AppTheme.primaryColor, size: 20),
+            ),
+            const SizedBox(width: 16),
+            Expanded(
+              child: Text(
+                title,
+                style: const TextStyle(
+                  fontSize: 15,
+                  fontWeight: FontWeight.w500,
+                  color: AppTheme.textPrimary,
+                ),
+              ),
+            ),
+            const Icon(
+              Icons.arrow_forward_ios,
+              size: 16,
+              color: AppTheme.textSecondary,
+            ),
+          ],
+        ),
+      ),
     );
   }
 }

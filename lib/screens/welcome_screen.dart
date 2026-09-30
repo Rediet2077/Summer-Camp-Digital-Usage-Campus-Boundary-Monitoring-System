@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import '../constants/app_theme.dart';
-import '../constants/app_constants.dart';
 import 'login_screen.dart';
 
 class WelcomeScreen extends StatefulWidget {
@@ -10,39 +9,7 @@ class WelcomeScreen extends StatefulWidget {
   State<WelcomeScreen> createState() => _WelcomeScreenState();
 }
 
-class _WelcomeScreenState extends State<WelcomeScreen> with SingleTickerProviderStateMixin {
-  late AnimationController _animationController;
-  late Animation<double> _fadeAnimation;
-  late Animation<Offset> _slideAnimation;
-
-  @override
-  void initState() {
-    super.initState();
-    _animationController = AnimationController(
-      vsync: this,
-      duration: const Duration(milliseconds: 1500),
-    );
-
-    _fadeAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
-      CurvedAnimation(parent: _animationController, curve: Curves.easeIn),
-    );
-
-    _slideAnimation = Tween<Offset>(
-      begin: const Offset(0, 0.3),
-      end: Offset.zero,
-    ).animate(
-      CurvedAnimation(parent: _animationController, curve: Curves.easeOut),
-    );
-
-    _animationController.forward();
-  }
-
-  @override
-  void dispose() {
-    _animationController.dispose();
-    super.dispose();
-  }
-
+class _WelcomeScreenState extends State<WelcomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -54,184 +21,123 @@ class _WelcomeScreenState extends State<WelcomeScreen> with SingleTickerProvider
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
             colors: [
-              AppTheme.darkBackground,
-              AppTheme.primaryColor,
-              AppTheme.darkBackground,
+              const Color(0xFFFFB6C1).withOpacity(0.3), // Light pink/peach
+              const Color(0xFF87CEEB).withOpacity(0.4), // Sky blue
+              const Color(0xFFB0E0E6).withOpacity(0.3), // Powder blue
             ],
           ),
         ),
         child: SafeArea(
-          child: SingleChildScrollView(
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 40.0),
-              child: Column(
-                children: [
-                  const SizedBox(height: 20),
-                  // Top Section - Logo and App Name
-                  FadeTransition(
-                    opacity: _fadeAnimation,
-                    child: SlideTransition(
-                      position: _slideAnimation,
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          // Logo/Icon
-                          Container(
-                            width: 120,
-                            height: 120,
-                            decoration: BoxDecoration(
-                              color: AppTheme.secondaryColor.withOpacity(0.2),
-                              shape: BoxShape.circle,
-                              border: Border.all(
-                                color: AppTheme.secondaryColor,
-                                width: 3,
-                              ),
-                            ),
-                            child: const Icon(
-                              Icons.security,
-                              size: 60,
-                              color: AppTheme.secondaryColor,
-                            ),
-                          ),
-                          const SizedBox(height: 24),
-                          // App Name
-                          Text(
-                            AppConstants.appName,
-                            style: Theme.of(context).textTheme.displayLarge?.copyWith(
-                              color: AppTheme.textPrimary,
-                              fontWeight: FontWeight.bold,
-                              letterSpacing: 2,
-                            ),
-                          ),
-                          const SizedBox(height: 8),
-                          // Tagline
-                          Text(
-                            AppConstants.appTagline,
-                            style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                              color: AppTheme.textSecondary,
-                            ),
-                            textAlign: TextAlign.center,
-                          ),
-                        ],
+          child: Padding(
+            padding: const EdgeInsets.all(24.0),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const Spacer(),
+                
+                // Logo/Shield Icon
+                Container(
+                  width: 100,
+                  height: 100,
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
+                      colors: [
+                        AppTheme.primaryColor,
+                        AppTheme.secondaryColor,
+                      ],
+                    ),
+                    shape: BoxShape.circle,
+                  ),
+                  child: const Icon(
+                    Icons.shield,
+                    size: 50,
+                    color: Colors.white,
+                  ),
+                ),
+                const SizedBox(height: 24),
+                
+                // App Name
+                const Text(
+                  'CampGuard',
+                  style: TextStyle(
+                    fontSize: 36,
+                    fontWeight: FontWeight.bold,
+                    color: AppTheme.textPrimary,
+                  ),
+                ),
+                const SizedBox(height: 8),
+                
+                // Tagline
+                const Text(
+                  'Welcome Student!',
+                  style: TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.w500,
+                    color: AppTheme.textPrimary,
+                  ),
+                ),
+                const SizedBox(height: 4),
+                const Text(
+                  'Stay focused, stay safe, build a',
+                  style: TextStyle(
+                    fontSize: 14,
+                    color: AppTheme.textSecondary,
+                  ),
+                ),
+                const Text(
+                  'better you',
+                  style: TextStyle(
+                    fontSize: 14,
+                    color: AppTheme.textSecondary,
+                  ),
+                ),
+                
+                const Spacer(),
+                
+                // Bottom Navigation Items
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    _buildBottomNavItem('Learn', Icons.lightbulb_outline),
+                    _buildBottomNavItem('Grow', Icons.trending_up),
+                    _buildBottomNavItem('Stay Safe', Icons.security),
+                  ],
+                ),
+                const SizedBox(height: 32),
+                
+                // Get Started Button
+                SizedBox(
+                  width: double.infinity,
+                  height: 56,
+                  child: ElevatedButton(
+                    onPressed: () {
+                      Navigator.of(context).pushReplacement(
+                        MaterialPageRoute(
+                          builder: (context) => const LoginScreen(),
+                        ),
+                      );
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: AppTheme.primaryColor,
+                      foregroundColor: Colors.white,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      elevation: 0,
+                    ),
+                    child: const Text(
+                      'Get Started',
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w600,
                       ),
                     ),
                   ),
-                  
-                  const SizedBox(height: 40),
-                  
-                  // Middle Section - Features/Description
-                  FadeTransition(
-                    opacity: _fadeAnimation,
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        _buildFeatureItem(
-                          icon: Icons.phone_android,
-                          title: 'Device Monitoring',
-                          description: 'Track app usage and digital activity',
-                        ),
-                        const SizedBox(height: 20),
-                        _buildFeatureItem(
-                          icon: Icons.location_on,
-                          title: 'Camp Boundary',
-                          description: 'Stay within designated camp areas',
-                        ),
-                        const SizedBox(height: 20),
-                        _buildFeatureItem(
-                          icon: Icons.analytics,
-                          title: 'Real-time Analytics',
-                          description: 'Monitor your activity and stay focused',
-                        ),
-                      ],
-                    ),
-                  ),
-                  
-                  const SizedBox(height: 40),
-                  
-                  // Bottom Section - Welcome Message and Button
-                  FadeTransition(
-                    opacity: _fadeAnimation,
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        Text(
-                          'Welcome Back',
-                          style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                            color: AppTheme.textPrimary,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        const SizedBox(height: 12),
-                        Text(
-                          'Sign in to continue monitoring\nyour camp activities',
-                          style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                            color: AppTheme.textSecondary,
-                          ),
-                          textAlign: TextAlign.center,
-                        ),
-                        const SizedBox(height: 32),
-                        // Get Started Button
-                        SizedBox(
-                          width: double.infinity,
-                          height: 56,
-                          child: ElevatedButton(
-                            onPressed: () {
-                              Navigator.of(context).pushReplacement(
-                                MaterialPageRoute(
-                                  builder: (context) => const LoginScreen(),
-                                ),
-                              );
-                            },
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: AppTheme.secondaryColor,
-                              foregroundColor: AppTheme.textPrimary,
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(12),
-                              ),
-                              elevation: 4,
-                            ),
-                            child: const Text(
-                              'Get Started',
-                              style: TextStyle(
-                                fontSize: 18,
-                                fontWeight: FontWeight.w600,
-                              ),
-                            ),
-                          ),
-                        ),
-                        const SizedBox(height: 16),
-                        // Already have account text
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text(
-                              'Already have an account? ',
-                              style: Theme.of(context).textTheme.bodyMedium,
-                            ),
-                            GestureDetector(
-                              onTap: () {
-                                Navigator.of(context).pushReplacement(
-                                  MaterialPageRoute(
-                                    builder: (context) => const LoginScreen(),
-                                  ),
-                                );
-                              },
-                              child: Text(
-                                'Sign In',
-                                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                                  color: AppTheme.secondaryColor,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                        const SizedBox(height: 20),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
+                ),
+                const SizedBox(height: 24),
+              ],
             ),
           ),
         ),
@@ -239,48 +145,20 @@ class _WelcomeScreenState extends State<WelcomeScreen> with SingleTickerProvider
     );
   }
 
-  Widget _buildFeatureItem({
-    required IconData icon,
-    required String title,
-    required String description,
-  }) {
-    return Row(
+  Widget _buildBottomNavItem(String label, IconData icon) {
+    return Column(
       children: [
-        Container(
-          width: 48,
-          height: 48,
-          decoration: BoxDecoration(
-            color: AppTheme.secondaryColor.withOpacity(0.1),
-            borderRadius: BorderRadius.circular(12),
-          ),
-          child: Icon(
-            icon,
-            color: AppTheme.secondaryColor,
-            size: 24,
-          ),
+        Icon(
+          icon,
+          size: 24,
+          color: AppTheme.textPrimary,
         ),
-        const SizedBox(width: 16),
-        Expanded(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                title,
-                style: const TextStyle(
-                  color: AppTheme.textPrimary,
-                  fontSize: 16,
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
-              const SizedBox(height: 4),
-              Text(
-                description,
-                style: const TextStyle(
-                  color: AppTheme.textSecondary,
-                  fontSize: 13,
-                ),
-              ),
-            ],
+        const SizedBox(height: 4),
+        Text(
+          label,
+          style: const TextStyle(
+            fontSize: 12,
+            color: AppTheme.textSecondary,
           ),
         ),
       ],

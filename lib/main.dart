@@ -16,7 +16,7 @@ class CampGuardApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       theme: AppTheme.lightTheme,
       darkTheme: AppTheme.darkTheme,
-      themeMode: ThemeMode.dark, // Default to dark theme as per design
+      themeMode: ThemeMode.light, // Light theme as per mockups
       home: const WelcomeScreen(),
     );
   }
