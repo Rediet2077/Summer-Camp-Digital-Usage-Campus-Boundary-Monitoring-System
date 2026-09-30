@@ -159,7 +159,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
             // Today's Usage Section
             const Text(
-              'Today\'s Usage',
+              "Today's Usage",
               style: TextStyle(
                 fontSize: 18,
                 fontWeight: FontWeight.bold,

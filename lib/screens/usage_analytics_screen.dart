@@ -80,7 +80,7 @@ class _UsageAnalyticsScreenState extends State<UsageAnalyticsScreen> {
                           mainAxisSize: MainAxisSize.min,
                           children: [
                             const Text(
-                              'Today's Usage',
+                              "Today's usage",
                               style: TextStyle(
                                 fontSize: 14,
                                 color: AppTheme.textSecondary,
