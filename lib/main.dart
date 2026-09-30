@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'constants/app_theme.dart';
+import 'screens/welcome_screen.dart';
 
 void main() {
   runApp(const CampGuardApp());
@@ -16,11 +17,7 @@ class CampGuardApp extends StatelessWidget {
       theme: AppTheme.lightTheme,
       darkTheme: AppTheme.darkTheme,
       themeMode: ThemeMode.dark, // Default to dark theme as per design
-      home: const Scaffold(
-        body: Center(
-          child: CircularProgressIndicator(),
-        ),
-      ),
+      home: const WelcomeScreen(),
     );
   }
 }
