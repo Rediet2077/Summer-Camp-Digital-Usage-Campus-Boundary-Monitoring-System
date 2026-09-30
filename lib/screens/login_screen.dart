@@ -100,9 +100,9 @@ class _LoginScreenState extends State<LoginScreen> {
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
             colors: [
-              const Color(0xFFFFB6C1).withOpacity(0.3),
-              const Color(0xFF87CEEB).withOpacity(0.4),
-              const Color(0xFFB0E0E6).withOpacity(0.3),
+              const Color(0xFFF5F1E6), // Cream
+              const Color(0xFFE8DCC4), // Warm beige
+              const Color(0xFFD5C9B1), // Light tan
             ],
           ),
         ),
