@@ -12,11 +12,15 @@ class LoginScreen extends StatefulWidget {
 
 class _LoginScreenState extends State<LoginScreen> {
   final _formKey = GlobalKey<FormState>();
-  final _emailController = TextEditingController();
-  final _passwordController = TextEditingController();
+  final _emailController = TextEditingController(text: 'admin@campguard.com');
+  final _passwordController = TextEditingController(text: 'admin123');
   bool _obscurePassword = true;
   bool _rememberMe = false;
   bool _isLoading = false;
+
+  // Default credentials
+  static const String defaultEmail = 'admin@campguard.com';
+  static const String defaultPassword = 'admin123';
 
   @override
   void dispose() {
@@ -32,19 +36,35 @@ class _LoginScreenState extends State<LoginScreen> {
       });
 
       // Simulate API call
-      await Future.delayed(const Duration(seconds: 2));
+      await Future.delayed(const Duration(seconds: 1));
 
       if (mounted) {
-        setState(() {
-          _isLoading = false;
-        });
+        // Check credentials
+        if (_emailController.text == defaultEmail && 
+            _passwordController.text == defaultPassword) {
+          setState(() {
+            _isLoading = false;
+          });
 
-        // Navigate to dashboard
-        Navigator.of(context).pushReplacement(
-          MaterialPageRoute(
-            builder: (context) => const DashboardScreen(),
-          ),
-        );
+          // Navigate to dashboard
+          Navigator.of(context).pushReplacement(
+            MaterialPageRoute(
+              builder: (context) => const DashboardScreen(),
+            ),
+          );
+        } else {
+          setState(() {
+            _isLoading = false;
+          });
+          
+          // Show error
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text('Invalid credentials. Use: admin@campguard.com / admin123'),
+              backgroundColor: Colors.red,
+            ),
+          );
+        }
       }
     }
   }
@@ -116,7 +136,59 @@ class _LoginScreenState extends State<LoginScreen> {
                     color: AppTheme.textSecondary,
                   ),
                 ),
-                const SizedBox(height: 40),
+                const SizedBox(height: 24),
+                
+                // Default Credentials Info Card
+                Container(
+                  padding: const EdgeInsets.all(16),
+                  decoration: BoxDecoration(
+                    color: AppTheme.secondaryColor.withOpacity(0.1),
+                    borderRadius: BorderRadius.circular(12),
+                    border: Border.all(
+                      color: AppTheme.secondaryColor.withOpacity(0.3),
+                      width: 1,
+                    ),
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        children: [
+                          Icon(
+                            Icons.info_outline,
+                            color: AppTheme.secondaryColor,
+                            size: 20,
+                          ),
+                          const SizedBox(width: 8),
+                          Text(
+                            'Demo Credentials',
+                            style: TextStyle(
+                              color: AppTheme.secondaryColor,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 14,
+                            ),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 8),
+                      Text(
+                        'Email: admin@campguard.com',
+                        style: TextStyle(
+                          color: AppTheme.textPrimary,
+                          fontSize: 13,
+                        ),
+                      ),
+                      Text(
+                        'Password: admin123',
+                        style: TextStyle(
+                          color: AppTheme.textPrimary,
+                          fontSize: 13,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                const SizedBox(height: 24),
                 
                 // Login Form
                 Form(

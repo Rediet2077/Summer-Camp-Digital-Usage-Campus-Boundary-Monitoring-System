@@ -61,14 +61,14 @@ class _WelcomeScreenState extends State<WelcomeScreen> with SingleTickerProvider
           ),
         ),
         child: SafeArea(
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 40.0),
-            child: Column(
-              children: [
-                // Top Section - Logo and App Name
-                Expanded(
-                  flex: 3,
-                  child: FadeTransition(
+          child: SingleChildScrollView(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 40.0),
+              child: Column(
+                children: [
+                  const SizedBox(height: 20),
+                  // Top Section - Logo and App Name
+                  FadeTransition(
                     opacity: _fadeAnimation,
                     child: SlideTransition(
                       position: _slideAnimation,
@@ -116,12 +116,11 @@ class _WelcomeScreenState extends State<WelcomeScreen> with SingleTickerProvider
                       ),
                     ),
                   ),
-                ),
-                
-                // Middle Section - Features/Description
-                Expanded(
-                  flex: 2,
-                  child: FadeTransition(
+                  
+                  const SizedBox(height: 40),
+                  
+                  // Middle Section - Features/Description
+                  FadeTransition(
                     opacity: _fadeAnimation,
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
@@ -146,12 +145,11 @@ class _WelcomeScreenState extends State<WelcomeScreen> with SingleTickerProvider
                       ],
                     ),
                   ),
-                ),
-                
-                // Bottom Section - Welcome Message and Button
-                Expanded(
-                  flex: 2,
-                  child: FadeTransition(
+                  
+                  const SizedBox(height: 40),
+                  
+                  // Bottom Section - Welcome Message and Button
+                  FadeTransition(
                     opacity: _fadeAnimation,
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.end,
@@ -228,11 +226,12 @@ class _WelcomeScreenState extends State<WelcomeScreen> with SingleTickerProvider
                             ),
                           ],
                         ),
+                        const SizedBox(height: 20),
                       ],
                     ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
         ),
