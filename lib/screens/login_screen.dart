@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import '../constants/app_theme.dart';
 import '../constants/app_constants.dart';
 import 'dashboard_screen.dart';
@@ -317,9 +316,9 @@ class _LoginScreenState extends State<LoginScreen> {
                         height: 56,
                         child: OutlinedButton.icon(
                           onPressed: _isLoading ? null : _handleGoogleLogin,
-                          icon: const FaIcon(
-                            FontAwesomeIcons.google,
-                            size: 20,
+                          icon: const Icon(
+                            Icons.g_mobiledata,
+                            size: 24,
                           ),
                           label: const Text(
                             'Login with Google',
