@@ -2,6 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
 import '../constants/app_theme.dart';
 import '../widgets/stat_card.dart';
+import 'students_list_screen.dart';
+import 'device_registration_screen.dart';
+import 'usage_analytics_screen.dart';
+import 'camp_boundary_screen.dart';
+import 'location_events_screen.dart';
+import 'alerts_screen.dart';
+import 'reports_screen.dart';
+import 'settings_screen.dart';
+import 'login_screen.dart';
 
 class DashboardScreen extends StatefulWidget {
   const DashboardScreen({super.key});
@@ -210,17 +219,103 @@ class _DashboardScreenState extends State<DashboardScreen> {
               ],
             ),
           ),
-          _buildDrawerItem(Icons.dashboard, 'Dashboard', () {}),
-          _buildDrawerItem(Icons.people, 'Students', () {}),
-          _buildDrawerItem(Icons.phone_android, 'Devices', () {}),
-          _buildDrawerItem(Icons.analytics, 'Analytics', () {}),
-          _buildDrawerItem(Icons.map, 'Geofence', () {}),
-          _buildDrawerItem(Icons.location_on, 'Location', () {}),
-          _buildDrawerItem(Icons.notifications, 'Alerts', () {}),
-          _buildDrawerItem(Icons.assessment, 'Reports', () {}),
+          _buildDrawerItem(Icons.dashboard, 'Dashboard', () {
+            Navigator.pop(context);
+          }),
+          _buildDrawerItem(Icons.people, 'Students', () {
+            Navigator.pop(context);
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => const StudentsListScreen()),
+            );
+          }),
+          _buildDrawerItem(Icons.phone_android, 'Devices', () {
+            Navigator.pop(context);
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => const DeviceRegistrationScreen()),
+            );
+          }),
+          _buildDrawerItem(Icons.analytics, 'Analytics', () {
+            Navigator.pop(context);
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => const UsageAnalyticsScreen()),
+            );
+          }),
+          _buildDrawerItem(Icons.map, 'Geofence', () {
+            Navigator.pop(context);
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => const CampBoundaryScreen()),
+            );
+          }),
+          _buildDrawerItem(Icons.location_on, 'Location', () {
+            Navigator.pop(context);
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => const LocationEventsScreen()),
+            );
+          }),
+          _buildDrawerItem(Icons.notifications, 'Alerts', () {
+            Navigator.pop(context);
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => const AlertsScreen()),
+            );
+          }),
+          _buildDrawerItem(Icons.assessment, 'Reports', () {
+            Navigator.pop(context);
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => const ReportsScreen()),
+            );
+          }),
           const Divider(color: AppTheme.textSecondary),
-          _buildDrawerItem(Icons.settings, 'Settings', () {}),
-          _buildDrawerItem(Icons.logout, 'Logout', () {}),
+          _buildDrawerItem(Icons.settings, 'Settings', () {
+            Navigator.pop(context);
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => const SettingsScreen()),
+            );
+          }),
+          _buildDrawerItem(Icons.logout, 'Logout', () {
+            Navigator.pop(context);
+            showDialog(
+              context: context,
+              builder: (context) => AlertDialog(
+                backgroundColor: AppTheme.cardBackground,
+                title: const Text(
+                  'Logout',
+                  style: TextStyle(color: AppTheme.textPrimary),
+                ),
+                content: const Text(
+                  'Are you sure you want to logout?',
+                  style: TextStyle(color: AppTheme.textSecondary),
+                ),
+                actions: [
+                  TextButton(
+                    onPressed: () => Navigator.pop(context),
+                    child: const Text('Cancel'),
+                  ),
+                  ElevatedButton(
+                    onPressed: () {
+                      Navigator.pop(context);
+                      Navigator.pushAndRemoveUntil(
+                        context,
+                        MaterialPageRoute(builder: (context) => const LoginScreen()),
+                        (route) => false,
+                      );
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: AppTheme.errorColor,
+                    ),
+                    child: const Text('Logout'),
+                  ),
+                ],
+              ),
+            );
+          }),
         ],
       ),
     );
@@ -514,6 +609,34 @@ class _DashboardScreenState extends State<DashboardScreen> {
           setState(() {
             _selectedIndex = index;
           });
+          
+          // Navigate based on selected index
+          switch (index) {
+            case 0:
+              // Dashboard - already here
+              break;
+            case 1:
+              // Analytics
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const UsageAnalyticsScreen()),
+              );
+              break;
+            case 2:
+              // Alerts
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const AlertsScreen()),
+              );
+              break;
+            case 3:
+              // Profile/Settings
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const SettingsScreen()),
+              );
+              break;
+          }
         },
         items: const [
           BottomNavigationBarItem(
